@@ -1,0 +1,388 @@
+<odoo>
+    <record id="action_report_dasri_contract" model="ir.actions.report">
+        <field name="name">Contrat DASRI</field>
+        <field name="model">dasri.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dasri.report_dasri_contract_document</field>
+        <field name="report_file">dasri.report_dasri_contract_document</field>
+        <field name="print_report_name">'Contrat_%s' % (object.name or 'DASRI')</field>
+    </record>
+
+    <record id="action_report_dasri_mission" model="ir.actions.report">
+        <field name="name">Mission DASRI</field>
+        <field name="model">dasri.mission</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dasri.report_dasri_mission_document</field>
+        <field name="report_file">dasri.report_dasri_mission_document</field>
+        <field name="print_report_name">'Mission_%s' % (object.name or 'DASRI')</field>
+    </record>
+
+    <record id="action_report_dasri_bordereau" model="ir.actions.report">
+        <field name="name">Bordereau DASRI</field>
+        <field name="model">dasri.bordereau</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dasri.report_dasri_bordereau_document</field>
+        <field name="report_file">dasri.report_dasri_bordereau_document</field>
+        <field name="print_report_name">'Bordereau_%s' % (object.name or 'DASRI')</field>
+    </record>
+
+    <record id="action_report_dasri_reception" model="ir.actions.report">
+        <field name="name">Reception DASRI</field>
+        <field name="model">dasri.reception</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dasri.report_dasri_reception_document</field>
+        <field name="report_file">dasri.report_dasri_reception_document</field>
+        <field name="print_report_name">'Reception_%s' % (object.name or 'DASRI')</field>
+    </record>
+
+    <record id="action_report_dasri_treatment" model="ir.actions.report">
+        <field name="name">Traitement DASRI</field>
+        <field name="model">dasri.treatment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dasri.report_dasri_treatment_document</field>
+        <field name="report_file">dasri.report_dasri_treatment_document</field>
+        <field name="print_report_name">'Traitement_%s' % (object.name or 'DASRI')</field>
+    </record>
+
+    <record id="action_report_dasri_kpi" model="ir.actions.report">
+        <field name="name">KPI DASRI</field>
+        <field name="model">dasri.kpi.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dasri.report_dasri_kpi_document</field>
+        <field name="report_file">dasri.report_dasri_kpi_document</field>
+        <field name="print_report_name">'KPI_DASRI'</field>
+    </record>
+
+    <template id="report_dasri_contract_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Contrat DASRI: <span t-field="o.name"/></h2>
+                        <h4>Informations Générales</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Etablissement</strong></td><td><span t-field="o.partner_id"/></td></tr>
+                                <tr><td><strong>Date debut</strong></td><td><span t-field="o.date_start"/></td></tr>
+                                <tr><td><strong>Date fin</strong></td><td><span t-field="o.date_end"/></td></tr>
+                                <tr><td><strong>Periodicite</strong></td><td><span t-field="o.periodicity"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Configuration Financière</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Mode facturation</strong></td><td><span t-field="o.pricing_type"/></td></tr>
+                                <tr><td><strong>Prix/KG</strong></td><td><span t-field="o.price_kg"/></td></tr>
+                                <tr><td><strong>Prix/Passage</strong></td><td><span t-field="o.price_trip"/></td></tr>
+                                <tr><td><strong>Minimum mensuel</strong></td><td><span t-field="o.monthly_min"/></td></tr>
+                                <tr><td><strong>Statut</strong></td><td><span t-field="o.state"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Conditions</h4>
+                        <p><span t-field="o.terms"/></p>
+                        <h4>Signature etablissement</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Nom</strong></td><td><span t-field="o.hospital_signatory_name"/></td></tr>
+                                <tr><td><strong>Fonction</strong></td><td><span t-field="o.hospital_signatory_role"/></td></tr>
+                                <tr><td><strong>Date signature</strong></td><td><span t-field="o.hospital_signed_on"/></td></tr>
+                                <tr>
+                                    <td><strong>Signature</strong></td>
+                                    <td>
+                                        <img t-if="o.hospital_signature"
+                                             t-att-src="image_data_uri(o.hospital_signature)"
+                                             style="max-height: 90px; max-width: 260px;"/>
+                                        <span t-else="">Non signee</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h4>Annexes</h4>
+                        <ul>
+                            <li t-if="not o.attachment_ids">Aucune annexe.</li>
+                            <li t-foreach="o.attachment_ids" t-as="a"><span t-esc="a.name"/></li>
+                        </ul>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_dasri_mission_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Ordre de Mission: <span t-field="o.name"/></h2>
+                        <h4>Planification</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Date planifiee</strong></td><td><span t-field="o.date_planned"/></td></tr>
+                                <tr><td><strong>Debut</strong></td><td><span t-field="o.planned_start"/></td></tr>
+                                <tr><td><strong>Fin</strong></td><td><span t-field="o.planned_end"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Ressources</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Vehicule</strong></td><td><span t-field="o.vehicle_id"/></td></tr>
+                                <tr><td><strong>Chauffeur</strong></td><td><span t-field="o.driver_id"/></td></tr>
+                                <tr><td><strong>Responsable</strong></td><td><span t-field="o.team_id"/></td></tr>
+                                <tr><td><strong>Zone</strong></td><td><span t-field="o.zone"/></td></tr>
+                                <tr><td><strong>Statut</strong></td><td><span t-field="o.state"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Destinations</h4>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Etablissement</th>
+                                    <th>Site</th>
+                                    <th>Adresse</th>
+                                    <th>Horaire</th>
+                                    <th>Contraintes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-if="not o.line_ids">
+                                    <td colspan="6">Aucune destination.</td>
+                                </tr>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.sequence"/></td>
+                                    <td><span t-field="l.partner_id"/></td>
+                                    <td><span t-field="l.location_id"/></td>
+                                    <td><span t-field="l.site_address"/></td>
+                                    <td><span t-field="l.planned_time"/></td>
+                                    <td><span t-field="l.constraint_note"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h4>Notes</h4>
+                        <p><span t-field="o.note"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_dasri_bordereau_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Bordereau DASRI: <span t-field="o.name"/></h2>
+                        <h4>Informations</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Date</strong></td><td><span t-field="o.date"/></td></tr>
+                                <tr><td><strong>Etablissement</strong></td><td><span t-field="o.partner_id"/></td></tr>
+                                <tr><td><strong>Site</strong></td><td><span t-field="o.location_id"/></td></tr>
+                                <tr><td><strong>Mission</strong></td><td><span t-field="o.mission_id"/></td></tr>
+                                <tr><td><strong>Arret mission</strong></td><td><span t-field="o.mission_line_id"/></td></tr>
+                                <tr><td><strong>Contrat</strong></td><td><span t-field="o.contract_id"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Déchets</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Type dechets</strong></td><td><span t-field="o.waste_type"/></td></tr>
+                                <tr><td><strong>Quantite (KG)</strong></td><td><span t-field="o.qty_kg"/></td></tr>
+                                <tr><td><strong>Statut</strong></td><td><span t-field="o.state"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Adresse site</h4>
+                        <p><span t-field="o.site_address"/></p>
+                        <h4>Signature etablissement</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Nom</strong></td><td><span t-field="o.hospital_signatory_name"/></td></tr>
+                                <tr><td><strong>Fonction</strong></td><td><span t-field="o.hospital_signatory_role"/></td></tr>
+                                <tr><td><strong>Date signature</strong></td><td><span t-field="o.hospital_signed_on"/></td></tr>
+                                <tr>
+                                    <td><strong>Signature</strong></td>
+                                    <td>
+                                        <img t-if="o.hospital_signature"
+                                             t-att-src="image_data_uri(o.hospital_signature)"
+                                             style="max-height: 90px; max-width: 260px;"/>
+                                        <span t-else="">Non signee</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h4>Observations</h4>
+                        <p><span t-field="o.note"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_dasri_reception_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Reception DASRI: <span t-field="o.name"/></h2>
+                        <h4>Reference</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Date reception</strong></td><td><span t-field="o.date"/></td></tr>
+                                <tr><td><strong>Mission</strong></td><td><span t-field="o.mission_id"/></td></tr>
+                                <tr><td><strong>Etablissement</strong></td><td><span t-field="o.partner_id"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Pesee</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Poids brut (KG)</strong></td><td><span t-field="o.weight_gross"/></td></tr>
+                                <tr><td><strong>Tare (KG)</strong></td><td><span t-field="o.weight_tare"/></td></tr>
+                                <tr><td><strong>Poids net (KG)</strong></td><td><span t-field="o.weight_net"/></td></tr>
+                                <tr><td><strong>Total bordereaux (KG)</strong></td><td><span t-field="o.bordereau_weight_total"/></td></tr>
+                                <tr><td><strong>Ecart poids (KG)</strong></td><td><span t-field="o.weight_gap"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Stock</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Transfert stock</strong></td><td><span t-field="o.picking_id"/></td></tr>
+                                <tr><td><strong>Statut</strong></td><td><span t-field="o.state"/></td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Bordereaux recus</h4>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th>Bordereau</th>
+                                    <th>Etablissement</th>
+                                    <th>Site</th>
+                                    <th>Quantite (KG)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-if="not o.bordereau_line_ids">
+                                    <td colspan="4">Aucun bordereau.</td>
+                                </tr>
+                                <tr t-foreach="o.bordereau_line_ids" t-as="l">
+                                    <td><span t-field="l.bordereau_id"/></td>
+                                    <td><span t-field="l.partner_id"/></td>
+                                    <td><span t-field="l.location_id"/></td>
+                                    <td><span t-field="l.qty_kg"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Lignes stock</h4>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Unite</th>
+                                    <th>Quantite</th>
+                                    <th>Lot</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-if="not o.line_ids">
+                                    <td colspan="4">Aucune ligne.</td>
+                                </tr>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.product_id"/></td>
+                                    <td><span t-field="l.uom_id"/></td>
+                                    <td><span t-field="l.qty"/></td>
+                                    <td><span t-field="l.lot_id"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h4>Observations</h4>
+                        <p><span t-field="o.note"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_dasri_treatment_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Traitement DASRI: <span t-field="o.name"/></h2>
+                        <h4>Operation</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Date</strong></td><td><span t-field="o.date"/></td></tr>
+                                <tr><td><strong>Operation</strong></td><td><span t-field="o.operation_type"/></td></tr>
+                                <tr><td><strong>Reception</strong></td><td><span t-field="o.reception_id"/></td></tr>
+                                <tr><td><strong>Mission</strong></td><td><span t-field="o.mission_id"/></td></tr>
+                                <tr><td><strong>Etablissement</strong></td><td><span t-field="o.partner_id"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Quantites</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Quantite recue (KG)</strong></td><td><span t-field="o.qty_received_kg"/></td></tr>
+                                <tr><td><strong>Quantite traitee (KG)</strong></td><td><span t-field="o.qty_treated_kg"/></td></tr>
+                                <tr><td><strong>Ecart (KG)</strong></td><td><span t-field="o.gap_kg"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Certificat</h4>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td><strong>Reference certificat</strong></td><td><span t-field="o.certificate_ref"/></td></tr>
+                                <tr><td><strong>Statut</strong></td><td><span t-field="o.state"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Observations</h4>
+                        <p><span t-field="o.note"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_dasri_kpi_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>KPI DASRI - Rapport de synthese</h2>
+                    <table class="table table-sm o_main_table">
+                        <thead>
+                            <tr>
+                                <th>Mois</th>
+                                <th>Etablissement</th>
+                                <th>Contrat</th>
+                                <th>Missions</th>
+                                <th>Passages</th>
+                                <th>Tonnage (KG)</th>
+                                <th>CA estime</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-if="not docs">
+                                <td colspan="7">Aucune donnee KPI.</td>
+                            </tr>
+                            <tr t-foreach="docs" t-as="o">
+                                <td><span t-field="o.period_month"/></td>
+                                <td><span t-field="o.partner_id"/></td>
+                                <td><span t-field="o.contract_id"/></td>
+                                <td><span t-field="o.mission_count"/></td>
+                                <td><span t-field="o.trips_count"/></td>
+                                <td><span t-field="o.qty_kg_total"/></td>
+                                <td><span t-field="o.revenue_estimated"/></td>
+                            </tr>
+                            <tr t-if="docs">
+                                <td colspan="3"><strong>Total</strong></td>
+                                <td><strong><span t-esc="sum(docs.mapped('mission_count'))"/></strong></td>
+                                <td><strong><span t-esc="sum(docs.mapped('trips_count'))"/></strong></td>
+                                <td><strong><span t-esc="sum(docs.mapped('qty_kg_total'))"/></strong></td>
+                                <td><strong><span t-esc="sum(docs.mapped('revenue_estimated'))"/></strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

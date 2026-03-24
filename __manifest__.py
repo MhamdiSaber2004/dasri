@@ -1,0 +1,23 @@
+{
+    'name': 'Dasri',
+    'depends': ['base', 'mail', 'fleet', 'hr', 'stock', 'account'],
+    'data': [
+        'security/dasri_groups.xml',
+        'security/ir.model.access.csv',
+        'data/sequence_data.xml',
+        'reports/dasri_reports.xml',
+        'views/contract_views.xml',
+        'views/invoice_wizard_views.xml',
+        'views/partner_views.xml',
+        'views/mission_views.xml',
+        'views/bordereau_views.xml',
+        'views/reception_views.xml',
+        'views/treatment_views.xml',
+        'views/zone_views.xml',
+        'views/incinerator_views.xml',
+        'views/kpi_views.xml',
+        'views/menu_views.xml',
+    ],
+    'installable': True,
+    'application': True,
+}

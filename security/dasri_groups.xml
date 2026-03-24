@@ -1,0 +1,42 @@
+<odoo>
+    <record id="module_category_dasri" model="ir.module.category">
+        <field name="name">DASRI</field>
+        <field name="sequence">35</field>
+    </record>
+
+    <record id="group_dasri_admin" model="res.groups">
+        <field name="name">DASRI Admin</field>
+        <field name="category_id" ref="dasri.module_category_dasri"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_dasri_exploitation" model="res.groups">
+        <field name="name">DASRI Exploitation</field>
+        <field name="category_id" ref="dasri.module_category_dasri"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_dasri_driver" model="res.groups">
+        <field name="name">DASRI Chauffeur</field>
+        <field name="category_id" ref="dasri.module_category_dasri"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_dasri_reception" model="res.groups">
+        <field name="name">DASRI Reception</field>
+        <field name="category_id" ref="dasri.module_category_dasri"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_dasri_billing" model="res.groups">
+        <field name="name">DASRI Facturation</field>
+        <field name="category_id" ref="dasri.module_category_dasri"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_dasri_direction" model="res.groups">
+        <field name="name">DASRI Direction</field>
+        <field name="category_id" ref="dasri.module_category_dasri"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+</odoo>

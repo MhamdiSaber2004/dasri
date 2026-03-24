@@ -1,0 +1,107 @@
+<odoo>
+    <record id="view_dasri_reception_form" model="ir.ui.view">
+        <field name="name">dasri.reception.form</field>
+        <field name="model">dasri.reception</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_print_pdf" string="PDF" type="object"/>
+                    <button name="action_weighed" string="Peser" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_validate" string="Valider" type="object"
+                            invisible="state != 'weighed'"/>
+                    <button name="action_done" string="Terminer" type="object"
+                            invisible="state != 'validated'"/>
+                    <button name="action_reset_to_draft" string="Remettre en brouillon" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_open_mission" class="oe_stat_button" icon="fa-truck">
+                            <field name="mission_id" widget="statinfo" string="Mission"/>
+                        </button>
+                        <button type="object" name="action_open_bordereaux" class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="bordereau_count" widget="statinfo" string="Bordereaux"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Reference">
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="mission_id" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <group string="Pesee">
+                        <field name="weight_gross" readonly="state in ('validated', 'done')"/>
+                        <field name="weight_tare" readonly="state in ('validated', 'done')"/>
+                        <field name="weight_net" readonly="1"/>
+                        <field name="bordereau_weight_total" readonly="1"/>
+                        <field name="weight_gap" readonly="1"/>
+                        <field name="scale_ref" readonly="state in ('validated', 'done')"/>
+                    </group>
+                    <group string="Stock">
+                        <field name="picking_type_id" readonly="state in ('validated', 'done')"/>
+                        <field name="stock_location_src_id" readonly="state in ('validated', 'done')"/>
+                        <field name="stock_location_dest_id" readonly="state in ('validated', 'done')"/>
+                        <field name="picking_id" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Bordereaux">
+                            <field name="bordereau_line_ids" readonly="state in ('validated', 'done')" create="false">
+                                <list>
+                                    <field name="bordereau_id" readonly="1"/>
+                                    <field name="partner_id" readonly="1"/>
+                                    <field name="location_id" readonly="1"/>
+                                    <field name="qty_kg"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Lignes">
+                            <field name="line_ids" readonly="state in ('validated', 'done')">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="uom_id" readonly="1"/>
+                                    <field name="qty"/>
+                                    <field name="lot_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Observations">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dasri_reception_tree" model="ir.ui.view">
+        <field name="name">dasri.reception.list</field>
+        <field name="model">dasri.reception</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'draft'"
+                  decoration-warning="state == 'weighed'"
+                  decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="mission_id"/>
+                <field name="bordereau_count"/>
+                <field name="bordereau_weight_total"/>
+                <field name="weight_net"/>
+                <field name="weight_gap"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dasri_reception" model="ir.actions.act_window">
+        <field name="name">Receptions DASRI</field>
+        <field name="res_model">dasri.reception</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

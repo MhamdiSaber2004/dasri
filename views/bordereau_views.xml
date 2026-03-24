@@ -1,0 +1,101 @@
+<odoo>
+    <record id="view_dasri_bordereau_form" model="ir.ui.view">
+        <field name="name">dasri.bordereau.form</field>
+        <field name="model">dasri.bordereau</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_print_pdf" string="PDF" type="object"/>
+                    <button name="action_sign" string="Signer" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_validate" string="Valider" type="object"
+                            invisible="state != 'signed'"/>
+                    <button name="action_archive" string="Archiver" type="object"
+                            invisible="state != 'validated'"/>
+                    <button name="action_reset_to_draft" string="Remettre en brouillon" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_open_contracts" class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="contract_count" widget="statinfo" string="Contrats"/>
+                        </button>
+                        <button type="object" name="action_open_reception" class="oe_stat_button" icon="fa-inbox">
+                            <field name="reception_count" widget="statinfo" string="Receptions"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Informations">
+                            <field name="mission_id"/>
+                            <field name="mission_line_id"/>
+                            <field name="contract_id"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="location_id" readonly="1"/>
+                            <field name="date"/>
+                            <field name="site_address" readonly="1"/>
+                        </group>
+                        <group string="Déchets">
+                            <field name="waste_type"/>
+                            <field name="waste_product_id"/>
+                            <field name="qty_kg"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Observations">
+                            <field name="note"/>
+                        </page>
+                        <page string="Signature Hôpital">
+                            <group>
+                                <field name="hospital_signatory_name" readonly="state in ('signed', 'validated', 'archived')"/>
+                                <field name="hospital_signatory_role" readonly="state in ('signed', 'validated', 'archived')"/>
+                                <field name="hospital_signed_on" readonly="1"/>
+                            </group>
+                            <group string="Signature réelle">
+                                <field name="hospital_signature" widget="signature"
+                                       readonly="state in ('signed', 'validated', 'archived')"/>
+                            </group>
+                        </page>
+                        <page string="Pièces jointes">
+                            <field name="message_attachment_count" invisible="1"/>
+                            <field name="message_ids" widget="mail_thread" options="{'no_follower': True}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dasri_bordereau_tree" model="ir.ui.view">
+        <field name="name">dasri.bordereau.list</field>
+        <field name="model">dasri.bordereau</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'draft'"
+                  decoration-warning="state == 'signed'"
+                  decoration-success="state == 'validated'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="contract_id"/>
+                <field name="location_id"/>
+                <field name="mission_id"/>
+                <field name="waste_type"/>
+                <field name="waste_product_id"/>
+                <field name="qty_kg"/>
+                <field name="hospital_signed_on"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dasri_bordereau" model="ir.actions.act_window">
+        <field name="name">Bordereaux DASRI</field>
+        <field name="res_model">dasri.bordereau</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

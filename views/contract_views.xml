@@ -1,0 +1,93 @@
+<odoo>
+    <record id="view_dasri_contract_form" model="ir.ui.view">
+        <field name="name">dasri.contract.form</field>
+        <field name="model">dasri.contract</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_print_pdf" string="PDF" type="object"/>
+                    <button name="action_sign" string="Signer" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_open_invoice_wizard" string="Facturer" type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_suspend" string="Suspendre" type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_close" string="Clôturer" type="object"
+                            invisible="state == 'closed'"/>
+                    <button name="action_reset_to_draft" string="Remettre en brouillon" type="object"
+                            invisible="state not in ('active', 'suspended')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_open_partner" class="oe_stat_button" icon="fa-building-o">
+                            <field name="partner_count" widget="statinfo" string="Établissement"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Informations Générales">
+                            <field name="partner_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="periodicity"/>
+                        </group>
+                        <group string="Configuration Financière">
+                            <field name="pricing_type"/>
+                            <field name="price_kg" invisible="pricing_type == 'trip'"/>
+                            <field name="price_trip" invisible="pricing_type == 'weight'"/>
+                            <field name="monthly_min"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Conditions">
+                            <field name="terms" placeholder="Conditions générales, modalités, pénalités, etc."/>
+                        </page>
+                        <page string="Signature Hôpital">
+                            <group>
+                                <field name="hospital_signatory_name" readonly="state in ('active', 'suspended', 'closed')"/>
+                                <field name="hospital_signatory_role" readonly="state in ('active', 'suspended', 'closed')"/>
+                                <field name="hospital_signed_on" readonly="1"/>
+                            </group>
+                            <group string="Signature réelle">
+                                <field name="hospital_signature" widget="signature"
+                                       readonly="state in ('active', 'suspended', 'closed')"/>
+                            </group>
+                        </page>
+                        <page string="Annexes">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dasri_contract_tree" model="ir.ui.view">
+        <field name="name">dasri.contract.tree</field>
+        <field name="model">dasri.contract</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'draft'" decoration-success="state == 'active'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_start"/>
+                <field name="pricing_type"/>
+                <field name="hospital_signed_on"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dasri_contract" model="ir.actions.act_window">
+        <field name="name">Contrats DASRI</field>
+        <field name="res_model">dasri.contract</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

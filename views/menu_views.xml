@@ -1,0 +1,37 @@
+<odoo>
+    <menuitem id="menu_dasri_root" name="Gestion DASRI" sequence="10"
+              groups="base.group_user"/>
+    <menuitem id="menu_dasri_operations" name="Opérations" parent="menu_dasri_root" sequence="20"/>
+    <menuitem id="menu_dasri_reporting" name="Reporting" parent="menu_dasri_root" sequence="80"
+              groups="base.group_user"/>
+    <menuitem id="menu_dasri_config" name="Configuration" parent="menu_dasri_root" sequence="100"
+              groups="dasri.group_dasri_admin,dasri.group_dasri_exploitation"/>
+
+    <menuitem id="menu_dasri_mission" name="Missions" parent="menu_dasri_operations" action="action_dasri_mission"
+              groups="base.group_user"/>
+    <menuitem id="menu_dasri_bordereau" name="Bordereaux" parent="menu_dasri_operations" action="action_dasri_bordereau"
+              groups="base.group_user"/>
+    <menuitem id="menu_dasri_reception" name="Réceptions" parent="menu_dasri_operations" action="action_dasri_reception"
+              groups="base.group_user"/>
+    <menuitem id="menu_dasri_treatment" name="Traitement" parent="menu_dasri_operations" action="action_dasri_treatment"
+              groups="base.group_user"/>
+    <menuitem id="menu_dasri_invoice" name="Facturation mensuelle" parent="menu_dasri_operations"
+              action="action_dasri_invoice_wizard"
+              groups="dasri.group_dasri_admin,dasri.group_dasri_billing,dasri.group_dasri_direction"/>
+    <menuitem id="menu_dasri_contract" name="Contrats" parent="menu_dasri_config" action="action_dasri_contract"
+              groups="dasri.group_dasri_admin,dasri.group_dasri_exploitation,dasri.group_dasri_billing,dasri.group_dasri_direction"/>
+    <menuitem id="menu_dasri_zone" name="Zones" parent="menu_dasri_config" action="action_dasri_zone"
+              groups="dasri.group_dasri_admin,dasri.group_dasri_exploitation,dasri.group_dasri_direction"/>
+    <menuitem id="menu_dasri_incinerator" name="Incinerateurs" parent="menu_dasri_config" action="action_dasri_incinerator"
+              groups="dasri.group_dasri_admin,dasri.group_dasri_exploitation,dasri.group_dasri_direction"/>
+    <menuitem id="menu_dasri_kpi" name="KPI Dashboard" parent="menu_dasri_reporting" action="action_dasri_kpi_report"
+              groups="base.group_user"/>
+    <menuitem id="menu_dasri_alerts_root" name="Alertes" parent="menu_dasri_reporting" sequence="20"
+              groups="base.group_user"/>
+    <menuitem id="menu_dasri_alert_unsigned" name="Bordereaux non validés" parent="menu_dasri_alerts_root"
+              action="action_dasri_alert_unsigned_bordereaux" sequence="10" groups="base.group_user"/>
+    <menuitem id="menu_dasri_alert_missions" name="Missions en retard" parent="menu_dasri_alerts_root"
+              action="action_dasri_alert_open_missions" sequence="20" groups="base.group_user"/>
+    <menuitem id="menu_dasri_alert_weight_gap" name="Écarts de poids" parent="menu_dasri_alerts_root"
+              action="action_dasri_alert_weight_gap" sequence="30" groups="base.group_user"/>
+</odoo>

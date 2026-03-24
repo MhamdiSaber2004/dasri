@@ -1,0 +1,31 @@
+<odoo>
+    <record id="view_partner_form_dasri_contracts" model="ir.ui.view">
+        <field name="name">res.partner.form.dasri.contracts</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="object"
+                        name="action_open_dasri_contracts"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o"
+                        string="Contrats DASRI">
+                    <field name="dasri_contract_count" widget="statinfo" string="Contrats"/>
+                </button>
+            </xpath>
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="Contrats DASRI">
+                    <field name="dasri_contract_ids" context="{'default_partner_id': id}">
+                        <list>
+                            <field name="name"/>
+                            <field name="state"/>
+                            <field name="pricing_type"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

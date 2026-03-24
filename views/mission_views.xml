@@ -1,0 +1,103 @@
+<odoo>
+    <record id="view_dasri_mission_form" model="ir.ui.view">
+        <field name="name">dasri.mission.form</field>
+        <field name="model">dasri.mission</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_print_pdf" string="PDF" type="object"/>
+                    <button name="action_plan" string="Planifier" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_start" string="Démarrer" type="object"
+                            invisible="state != 'planned'"/>
+                    <button name="action_done" string="Clôturer" type="object"
+                            invisible="state not in ('planned','in_progress')"/>
+                    <button name="action_cancel" string="Annuler" type="object"
+                            invisible="state == 'cancelled'"/>
+                    <button name="action_reset_to_draft" string="Remettre en brouillon" type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_open_bordereaux" class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="bordereau_count" widget="statinfo" string="Bordereaux"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Planification">
+                            <field name="date_planned"/>
+                            <field name="planned_start"/>
+                            <field name="planned_end"/>
+                        </group>
+                        <group string="Ressources">
+                            <field name="vehicle_id"/>
+                            <field name="driver_id"/>
+                            <field name="team_id"/>
+                            <field name="zone_id"/>
+                            <field name="zone" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Destinations">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="partner_id"/>
+                                    <field name="location_id"/>
+                                    <field name="site_address"/>
+                                    <field name="planned_time"/>
+                                    <field name="constraint_note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" placeholder="Informations opérationnelles, contraintes, etc."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dasri_mission_tree" model="ir.ui.view">
+        <field name="name">dasri.mission.list</field>
+        <field name="model">dasri.mission</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'draft'"
+                  decoration-warning="state == 'planned'"
+                  decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="date_planned"/>
+                <field name="planned_start"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="zone_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dasri_mission_calendar" model="ir.ui.view">
+        <field name="name">dasri.mission.calendar</field>
+        <field name="model">dasri.mission</field>
+        <field name="arch" type="xml">
+            <calendar string="Missions DASRI" date_start="planned_start" date_stop="planned_end" color="vehicle_id">
+                <field name="name"/>
+                <field name="driver_id"/>
+                <field name="vehicle_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_dasri_mission" model="ir.actions.act_window">
+        <field name="name">Missions DASRI</field>
+        <field name="res_model">dasri.mission</field>
+        <field name="view_mode">list,form,calendar</field>
+    </record>
+</odoo>

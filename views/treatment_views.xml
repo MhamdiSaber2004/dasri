@@ -1,0 +1,72 @@
+<odoo>
+    <record id="view_dasri_treatment_form" model="ir.ui.view">
+        <field name="name">dasri.treatment.form</field>
+        <field name="model">dasri.treatment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_print_pdf" string="PDF" type="object"/>
+                    <button name="action_done" string="Terminer" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_reset_to_draft" string="Remettre en brouillon" type="object"
+                            invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Operation">
+                            <field name="date"/>
+                            <field name="operation_type"/>
+                            <field name="reception_id"/>
+                            <field name="incinerator_id" invisible="operation_type == 'sorting'"/>
+                            <field name="mission_id" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                        </group>
+                        <group string="Quantites">
+                            <field name="qty_received_kg" readonly="1"/>
+                            <field name="qty_treated_kg"/>
+                            <field name="gap_kg" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Certificat">
+                        <field name="certificate_ref"/>
+                        <field name="certificate_attachment_id"/>
+                    </group>
+                    <group string="Observations">
+                        <field name="note"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dasri_treatment_tree" model="ir.ui.view">
+        <field name="name">dasri.treatment.list</field>
+        <field name="model">dasri.treatment</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'draft'" decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="operation_type"/>
+                <field name="partner_id"/>
+                <field name="reception_id"/>
+                <field name="incinerator_id"/>
+                <field name="qty_received_kg"/>
+                <field name="qty_treated_kg"/>
+                <field name="gap_kg"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dasri_treatment" model="ir.actions.act_window">
+        <field name="name">Traitement DASRI</field>
+        <field name="res_model">dasri.treatment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

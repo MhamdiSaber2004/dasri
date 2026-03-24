@@ -1,0 +1,90 @@
+<odoo>
+    <record id="view_dasri_kpi_report_search" model="ir.ui.view">
+        <field name="name">dasri.kpi.report.search</field>
+        <field name="model">dasri.kpi.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="period_month"/>
+                <field name="partner_id"/>
+                <field name="contract_id"/>
+                <filter string="Par Mois" name="group_by_month" context="{'group_by': 'period_month'}"/>
+                <filter string="Par Etablissement" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
+                <filter string="Par Contrat" name="group_by_contract" context="{'group_by': 'contract_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_dasri_kpi_report_tree" model="ir.ui.view">
+        <field name="name">dasri.kpi.report.list</field>
+        <field name="model">dasri.kpi.report</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false" edit="false">
+                <field name="period_month"/>
+                <field name="partner_id"/>
+                <field name="contract_id"/>
+                <field name="mission_count" sum="Total"/>
+                <field name="trips_count" sum="Total"/>
+                <field name="qty_kg_total" sum="Total KG"/>
+                <field name="revenue_estimated" sum="Total CA"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dasri_kpi_report_pivot" model="ir.ui.view">
+        <field name="name">dasri.kpi.report.pivot</field>
+        <field name="model">dasri.kpi.report</field>
+        <field name="arch" type="xml">
+            <pivot string="KPI DASRI" disable_linking="1">
+                <field name="period_month" type="row" interval="month"/>
+                <field name="partner_id" type="col"/>
+                <field name="qty_kg_total" type="measure"/>
+                <field name="trips_count" type="measure"/>
+                <field name="mission_count" type="measure"/>
+                <field name="revenue_estimated" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_dasri_kpi_report_graph" model="ir.ui.view">
+        <field name="name">dasri.kpi.report.graph</field>
+        <field name="model">dasri.kpi.report</field>
+        <field name="arch" type="xml">
+            <graph string="KPI DASRI" type="bar">
+                <field name="period_month" interval="month"/>
+                <field name="qty_kg_total"/>
+                <field name="revenue_estimated"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_dasri_kpi_report" model="ir.actions.act_window">
+        <field name="name">KPI DASRI</field>
+        <field name="res_model">dasri.kpi.report</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="search_view_id" ref="view_dasri_kpi_report_search"/>
+        <field name="help" type="html">
+            <p>Analyse mensuelle des tonnages, passages et CA estime.</p>
+        </field>
+    </record>
+
+    <record id="action_dasri_alert_unsigned_bordereaux" model="ir.actions.act_window">
+        <field name="name">Alerte Bordereaux non valides</field>
+        <field name="res_model">dasri.bordereau</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ['draft', 'signed'])]</field>
+    </record>
+
+    <record id="action_dasri_alert_open_missions" model="ir.actions.act_window">
+        <field name="name">Alerte Missions en retard</field>
+        <field name="res_model">dasri.mission</field>
+        <field name="view_mode">list,form,calendar</field>
+        <field name="domain">[('state', 'in', ['planned', 'in_progress']), ('date_planned', '&lt;', context_today())]</field>
+    </record>
+
+    <record id="action_dasri_alert_weight_gap" model="ir.actions.act_window">
+        <field name="name">Alerte Ecarts de poids</field>
+        <field name="res_model">dasri.reception</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ['validated', 'done']), ('weight_gap_abs', '&gt;', 0.01)]</field>
+    </record>
+</odoo>
